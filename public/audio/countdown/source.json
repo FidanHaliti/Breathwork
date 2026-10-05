@@ -1,0 +1,37 @@
+{
+  "voice": "sq-AL-AnilaNeural",
+  "locale": "sq-AL",
+  "kind": "synthetic speech",
+  "clips": [
+    {
+      "number": 5,
+      "word": "pesë",
+      "file": "sq-5.wav",
+      "durationSeconds": 0.4161
+    },
+    {
+      "number": 4,
+      "word": "katër",
+      "file": "sq-4.wav",
+      "durationSeconds": 0.4783
+    },
+    {
+      "number": 3,
+      "word": "tre",
+      "file": "sq-3.wav",
+      "durationSeconds": 0.4055
+    },
+    {
+      "number": 2,
+      "word": "dy",
+      "file": "sq-2.wav",
+      "durationSeconds": 0.4184
+    },
+    {
+      "number": 1,
+      "word": "një",
+      "file": "sq-1.wav",
+      "durationSeconds": 0.4401
+    }
+  ]
+}
