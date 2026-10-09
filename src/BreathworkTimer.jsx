@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Wind, Play, Pause, RotateCcw, Volume2, Music2, Check, Leaf, ArrowUpRight, Headphones, ShieldCheck } from 'lucide-react';
+import { Wind, Play, Pause, RotateCcw, Volume2, Music2, Check, Moon, Sun, ChevronDown, ArrowUpRight, Headphones, ShieldCheck } from 'lucide-react';
 import { useSessionTimer } from './useSessionTimer';
+import { useTheme } from './useTheme';
 import { CueAudio, findAlbanianVoice } from './audio';
 import { COUNTDOWN_WORDS, PHASE_LABELS, PHASES, TOTAL_SECONDS, formatTime } from './session';
 
@@ -70,17 +71,17 @@ export function PhaseProgress({ progress, children, phaseType, running }) {
 export function TimerDisplay({ session }) {
   const countdown = session.remaining <= 5 && session.remaining > 0 && session.status !== 'idle';
   return <PhaseProgress progress={session.phaseProgress} phaseType={session.phase.type} running={session.status === 'running'}>
-    {session.complete ? <><div className="completion-symbol"><Check size={43} strokeWidth={1.5} /></div><span className="complete-text">Bravo, një moment<br />për veten.</span><span className="timer-caption">10:10 · SEANCË E PLOTË</span></> : <>
-      <span className="timer-eyebrow">{session.status === 'paused' ? 'NË PAUZË' : countdown ? 'FAZA TJETËR PAS' : 'KOHA E MBETUR'}</span>
+    {session.complete ? <><div className="completion-symbol"><Check size={43} strokeWidth={1.5} /></div><span className="complete-text">Merr frymë<br />normalisht.</span><span className="timer-caption">10:10 · SEANCË E PLOTË</span></> : <>
+      <span className="timer-eyebrow">{session.status === 'paused' ? 'NË PAUZË' : countdown ? session.index === PHASES.length - 1 ? 'SEANCA MBARON PAS' : 'FAZA TJETËR PAS' : 'KOHA E MBETUR'}</span>
       <span className={countdown ? 'countdown-number' : 'timer-digits'} data-testid="timer" role="timer" aria-live="off" aria-label={`Koha e mbetur: ${formatTime(session.remaining)}`}>{countdown ? session.remaining : formatTime(session.remaining)}</span>
-      <span className="timer-caption">{countdown ? COUNTDOWN_WORDS[session.remaining] : session.phase.type === 'breathing' ? 'GJEJ RITMIN TËND' : session.phase.type === 'hold' ? 'PA E DETYRUAR' : 'LËSHO TENSIONIN'}</span>
+      <span className="timer-caption">{countdown ? COUNTDOWN_WORDS[session.remaining] : session.phase.type === 'breathing' ? 'BUTË DHE RREGULLISHT' : session.phase.type === 'hold' ? 'VETËM SA NDIHESH REHAT' : 'FRYMËMARRJE NORMALE'}</span>
     </>}
   </PhaseProgress>;
 }
 
 export function SessionProgress({ session }) {
   return <div className="session-progress">
-    <div className="progress-labels"><span>Seanca jote</span><span><strong>{formatTime(Math.floor(session.elapsed))}</strong><span className="muted"> / {formatTime(TOTAL_SECONDS)}</span></span></div>
+    <div className="progress-labels"><span>Koha e seancës</span><span><strong>{formatTime(Math.floor(session.elapsed))}</strong><span className="muted"> / {formatTime(TOTAL_SECONDS)}</span></span></div>
     <div className="progress-track" role="progressbar" aria-label="Progresi i seancës" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(session.totalProgress * 100)}><span style={{ width: `${session.totalProgress * 100}%` }} /></div>
   </div>;
 }
@@ -107,14 +108,14 @@ export function AudioControls({ volume, setVolume, voiceEnabled, setVoiceEnabled
   };
   const stopMusic = () => { request.current++; music.current.pause(); setPlaying(false); setLoading(false); };
   const voiceNote = !voiceEnabled ? 'Numërim vizual me beep të shkurtër. Zëri është i fikur.'
-    : recordingState === 'ready' ? 'Numërimi shqip është gati: pesë, katër, tre, dy, një. Audio lokale, edhe offline.'
+    : recordingState === 'ready' ? 'Numërimi shqip është gati për 5 sekondat e fundit të çdo faze.'
     : recordingState === 'loading' ? 'Po përgatitet numërimi shqip…'
-    : recordingState === 'idle' ? 'Numërim shqip me audio lokale. Zëri përgatitet kur shtyp Start.'
+    : recordingState === 'idle' ? 'Zëri shqip numëron 5 sekondat e fundit të çdo faze.'
     : hasVoice ? 'Audio lokale nuk u hap. Numërimi përdor zërin shqip të pajisjes.'
     : 'Audio shqip nuk u hap. Numërimi shoqërohet me beep të shkurtër.';
   return <section className="audio-panel" aria-label="Kontrollet e audios">
     <audio ref={music} src={import.meta.env.VITE_AMBIENT_AUDIO || '/audio/ambient.wav'} loop preload="none" onError={() => { setPlaying(false); setMusicError('Muzika nuk u hap. Provo sërish.'); }} />
-    <div className="music-heading"><span className="audio-icon"><Headphones size={20} strokeWidth={1.6} /></span><div><h2>Pak më shumë qetësi</h2><p>Valë të buta, në sfondin tënd.</p></div><span className={`music-state ${playing ? 'active' : ''}`}><i />{playing ? 'Duke luajtur' : 'Muzika OFF'}</span></div>
+    <div className="music-heading"><span className="audio-icon"><Headphones size={20} strokeWidth={1.6} /></span><div><h2>Tinguj dhe numërim</h2><p>Tinguj valësh dhe numërim zanor sipas dëshirës.</p></div><span className={`music-state ${playing ? 'active' : ''}`}><i />{playing ? 'Duke luajtur' : 'Muzika OFF'}</span></div>
     <div className="audio-controls">
       <div className="music-buttons"><button className="audio-button" onClick={startMusic} disabled={playing || loading}><Music2 size={15} />{loading ? 'Duke hapur…' : 'Nise muzikën'}</button><button className="audio-button stop-music" onClick={stopMusic} disabled={!playing && !loading}><Pause size={14} />Ndal muzikën</button></div>
       <label className="volume-control"><Volume2 size={17} /><span className="sr-only">Volumi i muzikës</span><input aria-label="Volumi i muzikës" type="range" min="0" max="1" step="0.01" value={volume} onChange={(event) => setVolume(Number(event.target.value))} /><span>{Math.round(volume * 100)}%</span></label>
@@ -126,7 +127,7 @@ export function AudioControls({ volume, setVolume, voiceEnabled, setVoiceEnabled
 
 export function SessionOverview({ session }) {
   return <section className="session-overview" aria-labelledby="overview-heading">
-    <div className="section-heading"><h2 id="overview-heading">Rruga e frymëmarrjes</h2><span>3 raunde · 10 min 10 sek</span></div>
+    <div className="section-heading"><h2 id="overview-heading">Struktura e seancës</h2><span>3 raunde · 10 min 10 sek</span></div>
     <div className="round-grid">{[1, 2, 3].map((round) => {
       const active = !session.complete && session.phase.round === round;
       const done = session.complete || session.phase.round > round;
@@ -138,8 +139,34 @@ export function SessionOverview({ session }) {
   </section>;
 }
 
+function PracticeGuide() {
+  return <details className="practice-guide">
+    <summary>Për çfarë shërben ky ushtrim?<ChevronDown size={16} aria-hidden="true" /></summary>
+    <div className="guide-content">
+      <p>Ky timer të ndihmon të ndjekësh fazat e ushtrimit dhe ta kthesh vëmendjen te frymëmarrja. Vëzhgo ritmin e frymës dhe ndjesitë e trupit gjatë çdo raundi.</p>
+      <p>Frymëmarrja e ngadaltë dhe e rehatshme mund të ndihmojë në uljen e stresit. Burimet më poshtë trajtojnë këtë lloj frymëmarrjeje, jo skemën specifike 10:10 me mbajtje të frymës.</p>
+      <ul>
+        <li><strong>Gjatë frymëmarrjes:</strong> merr dhe nxirr frymën butë, pa e sforcuar ritmin.</li>
+        <li><strong>Gjatë mbajtjes:</strong> kohët janë orientuese. Merr frymë sapo të kesh nevojë; mund të vazhdosh me frymëmarrje normale edhe gjatë kësaj faze.</li>
+        <li><strong>Gjatë pushimit:</strong> lëre frymëmarrjen të kthehet në ritmin e zakonshëm.</li>
+      </ul>
+      <p className="guide-sources">Më shumë për frymëmarrjen dhe stresin: <a href="https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/" target="_blank" rel="noreferrer">NHS ↗</a><span aria-hidden="true"> · </span><a href="https://www.nccih.nih.gov/health/relaxation-techniques-what-you-need-to-know" target="_blank" rel="noreferrer">NCCIH ↗</a></p>
+    </div>
+  </details>;
+}
+
+function sessionHint(session) {
+  if (session.complete) return 'Qëndro ulur për pak dhe vëzhgo ritmin e frymëmarrjes.';
+  if (session.status === 'paused') return 'Timeri është në pauzë. Vazhdo kur të ndihesh rehat.';
+  if (session.status === 'idle') return 'Ulu ose shtrihu rehat. Merr frymë pa e sforcuar.';
+  if (session.phase.type === 'hold') return 'Merr frymë sapo të kesh nevojë, edhe nëse timeri vazhdon.';
+  if (session.phase.type === 'relax') return 'Lëre frymëmarrjen të kthehet në ritmin e zakonshëm.';
+  return 'Merr dhe nxirr frymën butë, me ritëm të rehatshëm.';
+}
+
 export default function BreathworkTimer() {
   const { session, start, pause, reset } = useSessionTimer();
+  const { theme, toggleTheme } = useTheme();
   const [volume, updateVolume] = useState(() => { const value = readPreference('breathwork.volume', 0.35); return typeof value === 'number' && Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0.35; });
   const [voiceEnabled, updateVoice] = useState(() => readPreference('breathwork.voice', true) === true);
   const [hasVoice, setHasVoice] = useState(false);
@@ -154,21 +181,22 @@ export default function BreathworkTimer() {
   const doReset = () => { cues.current.silence(); reset(); };
   return <div className="app-shell">
     <CountdownVoice session={session} cues={cues.current} voiceEnabled={voiceEnabled} onVoice={setHasVoice} />
-    <header className="site-header"><a className="brand" href="/" aria-label="Breathwork, kryefaqja"><span className="brand-icon"><Wind size={23} strokeWidth={1.7} /></span>breathwork<span className="brand-period">.</span></a><span className="header-note"><Leaf size={14} /> Një moment për veten</span></header>
+    <header className="site-header"><a className="brand" href="/" aria-label="Breathwork, kryefaqja"><span className="brand-icon"><Wind size={23} strokeWidth={1.7} /></span>breathwork<span className="brand-period">.</span></a><div className="header-actions"><span className="header-note">3 raunde · 10:10</span><button className="theme-toggle" onClick={toggleTheme} aria-label="Pamje e errët" aria-pressed={theme === 'dark'} title={theme === 'dark' ? 'Aktivizo pamjen e çelët' : 'Aktivizo pamjen e errët'}>{theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}<span>Pamje e errët</span></button></div></header>
     <main>
-      <div className="intro"><span className="eyebrow">FRYMËMARRJE E VETËDIJSHME</span><h1>Një frymë në një kohë.</h1><p>Gjej një vend të rehatshëm. Lëre pjesën tjetër të presë.</p></div>
+      <div className="intro"><span className="eyebrow">FRYMËMARRJE · MBAJTJE · PUSHIM</span><h1>Fokus te frymëmarrja.</h1><p>Tre raunde për të ushtruar vëmendjen te fryma<br className="intro-break" /> dhe për të vëzhguar ndjesitë e trupit.</p></div>
       <section className="timer-section" aria-label="Timeri i frymëmarrjes">
         <div className="phase-header"><span className="round-pill">{session.complete ? <Check size={13} /> : <span className="live-dot" />}{session.complete ? '3 raunde të përfunduara' : `Raundi ${session.phase.round} nga 3`}</span><h2 aria-live="polite" aria-atomic="true">{session.complete ? 'Seanca përfundoi' : PHASE_LABELS[session.phase.type]}</h2></div>
         <TimerDisplay session={session} />
         <div className="timer-actions"><button className="primary-button" onClick={session.status === 'running' ? doPause : begin}>{session.status === 'running' ? <Pause size={18} fill="currentColor" /> : <Play size={17} fill="currentColor" />}{session.status === 'running' ? 'Pause' : session.status === 'paused' ? 'Vazhdo' : session.complete ? 'Start përsëri' : 'Start'}</button><button className="reset-button" onClick={doReset} disabled={session.status === 'idle'}><RotateCcw size={17} />Reset</button></div>
-        <p className="timer-hint">{session.complete ? 'Merr frymë normalisht dhe shijo qetësinë.' : session.status === 'paused' ? 'Merr kohën tënde. Vazhdo kur të jesh gati.' : 'Ndiq ritmin tënd. Fazat kalojnë automatikisht.'}</p>
+        <p className="timer-hint">{sessionHint(session)}</p>
         <span className="sr-only" role="status">{session.status === 'paused' ? 'Seanca në pauzë' : session.status === 'running' ? 'Seanca vazhdon' : ''}</span>
         <SessionProgress session={session} />
       </section>
       <SessionOverview session={session} />
+      <PracticeGuide />
       <AudioControls volume={volume} setVolume={setVolume} voiceEnabled={voiceEnabled} setVoiceEnabled={setVoiceEnabled} hasVoice={hasVoice} recordingState={recordingState} />
       <aside className="safety-note"><ShieldCheck size={20} strokeWidth={1.5} /><p>Mos e detyro mbajtjen e frymës. Nëse ndjen marramendje, parehati ose nevojë për të marrë frymë, ndalo mbajtjen dhe merr frymë normalisht. Mos e praktiko gjatë vozitjes ose në ujë.</p></aside>
     </main>
-    <footer><span>Frymëmarrje. Hapësirë. Qetësi.</span><span>Me kujdes, për veten.</span></footer>
+    <footer><span>Frymëmarrje e vetëdijshme</span><span>Kohët janë udhëzim, jo objektiv.</span></footer>
   </div>;
 }

@@ -10,3 +10,114 @@
 .audio-note,.timer-hint,.progress-labels{font-size:11px}.safety-note p{font-size:12px}.round-card li{font-size:12px}.phase-duration{font-size:11px}.round-tag{font-size:9px}.timer-caption,.timer-eyebrow{color:#627455}.audio-controls .audio-button,.voice-control{font-size:11px}.volume-control>span:last-child{font-size:11px}footer{font-size:10px}
 @media(max-width:700px){.round-card li{font-size:10px}.phase-duration{font-size:10px}.safety-note p{font-size:11px}.audio-note{font-size:10px}.round-tag{font-size:8px}footer{font-size:9px}}
 @media(max-width:480px){.round-grid{grid-template-columns:1fr;gap:9px}.round-card{display:grid;grid-template-columns:94px 1fr;gap:15px;padding:16px}.round-heading{align-content:start;align-items:center;margin:0;gap:6px}.round-heading h3{font-size:12px}.round-number{width:23px;height:23px}.round-card li{font-size:12px;flex-wrap:nowrap}.phase-duration{font-size:12px}.round-card ul{gap:8px}.round-tag{font-size:9px;margin-top:4px}.round-card:not(.active-round):not(.done-round) .round-heading:after{display:none}.section-heading h2{font-size:13px}.section-heading>span{font-size:10px}}
+
+/* Theme controls and explanatory copy retain the timer's original layout. */
+:root { color-scheme: light; --page: #f7f8f2; --text: #263e34; --secondary: #65715e; --surface: #ffffff38; --focus: #a58d4f; color: var(--text); background: var(--page); }
+html { color: var(--text); background: var(--page); }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.theme-toggle { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; color: var(--text); background: var(--surface); font-size: 11px; }
+.theme-toggle:hover { background: #e9eddf; }
+.intro p { line-height: 1.7; }
+.timer-hint { max-width: 460px; margin-left: auto; margin-right: auto; min-height: 17px; }
+.practice-guide { margin-top: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.practice-guide summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; list-style: none; cursor: pointer; font-size: 13px; font-weight: 500; border-radius: 12px; }
+.practice-guide summary::-webkit-details-marker { display: none; }
+.practice-guide summary svg { flex-shrink: 0; transition: transform .2s; color: var(--secondary); }
+.practice-guide[open] summary svg { transform: rotate(180deg); }
+.practice-guide summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+.guide-content { padding: 0 20px 18px; font-size: 13px; line-height: 1.8; color: var(--secondary); }
+.guide-content p { margin: 0 0 12px; }
+.guide-content ul { margin: 0 0 14px; padding-left: 19px; }
+.guide-content li + li { margin-top: 7px; }
+.guide-content strong { color: var(--text); font-weight: 600; }
+.guide-content .guide-sources { font-size: 11px; margin-bottom: 0; }
+.guide-sources a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.done-round { opacity: 1; }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #141d19;
+  --text: #e3ebdf;
+  --secondary: #b2beaa;
+  --muted: #b2beaa;
+  --border: #354439;
+  --surface: #1c2720;
+  --green: #9cc494;
+  --focus: #c8af75;
+}
+[data-theme="dark"] body { background: radial-gradient(ellipse at 50% 32%, #283c2d60 0, transparent 47%), var(--page); }
+[data-theme="dark"] .brand-icon,
+[data-theme="dark"] .audio-icon { background: #2a3b2d; color: #b5d5a7; }
+[data-theme="dark"] .brand-period { color: #a9c98d; }
+[data-theme="dark"] .theme-toggle:hover { background: #2b3b2e; }
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .timer-caption,
+[data-theme="dark"] .timer-eyebrow { color: #b5c4a6; }
+[data-theme="dark"] .intro p,
+[data-theme="dark"] .timer-hint,
+[data-theme="dark"] .audio-note,
+[data-theme="dark"] .music-heading p,
+[data-theme="dark"] .music-state,
+[data-theme="dark"] .section-heading > span,
+[data-theme="dark"] .progress-labels,
+[data-theme="dark"] .round-card li,
+[data-theme="dark"] .safety-note,
+[data-theme="dark"] footer,
+[data-theme="dark"] .volume-control,
+[data-theme="dark"] .voice-control,
+[data-theme="dark"] .switch-label,
+[data-theme="dark"] .muted { color: var(--secondary); }
+[data-theme="dark"] .round-pill { color: #c0d5af; background: #263626; border-color: #41563a; }
+[data-theme="dark"] .live-dot { background: #b4ce8f; }
+[data-theme="dark"] .orbit-halo { background: radial-gradient(circle at 50% 42%, #2c3c29, #213023); box-shadow: 0 0 0 8px #acc89106, 0 0 0 21px #acc89104; }
+[data-theme="dark"] .ring-track { stroke: #3e4e37; }
+[data-theme="dark"] .ring-progress { stroke: #aecb8d; }
+[data-theme="dark"] .hold .orbit-halo { background: radial-gradient(circle, #393527, #29291f); }
+[data-theme="dark"] .hold .ring-progress { stroke: #cbb587; }
+[data-theme="dark"] .relax .orbit-halo { background: radial-gradient(circle, #293b35, #1e2e29); }
+[data-theme="dark"] .relax .ring-progress { stroke: #9ebfba; }
+[data-theme="dark"] .completion-symbol { background: #3b4c30; color: #c5ddb0; }
+[data-theme="dark"] .primary-button { background: #a6c49b; color: #192719; box-shadow: 0 3px 7px #0002; }
+[data-theme="dark"] .primary-button:hover { background: #bad5ae; }
+[data-theme="dark"] .reset-button { color: #bdc9b5; border-color: var(--border); }
+[data-theme="dark"] .reset-button:not(:disabled):hover { background: #2b3b2e; }
+[data-theme="dark"] .progress-labels strong { color: #c0d6ac; }
+[data-theme="dark"] .progress-track { background: #33422e; }
+[data-theme="dark"] .progress-track > span { background: #a2bf83; }
+[data-theme="dark"] .round-card,
+[data-theme="dark"] .audio-panel { background: var(--surface); }
+[data-theme="dark"] .round-card.active-round { background: #273624; border-color: #6b8453; }
+[data-theme="dark"] .round-number { background: #202d22; color: #bfcea9; border-color: #42553a; }
+[data-theme="dark"] .active-round .round-number,
+[data-theme="dark"] .round-tag { background: #384b2e; color: #d4e5c0; border-color: #4e633e; }
+[data-theme="dark"] .round-arrow { color: #94a38a; }
+[data-theme="dark"] .round-card li.active-phase { color: #d3e6b8; }
+[data-theme="dark"] .phase-dot { background: #788a6b; }
+[data-theme="dark"] .active-phase .phase-dot { background: #b8d48d; }
+[data-theme="dark"] .audio-button { background: #2b3c28; color: #c5dcb2; border-color: #4c6140; }
+[data-theme="dark"] .audio-button:not(:disabled):hover { background: #3a4e33; }
+[data-theme="dark"] .stop-music { background: transparent; }
+[data-theme="dark"] .volume-control input { accent-color: #b2cd92; }
+[data-theme="dark"] .switch { background: #64715c; }
+[data-theme="dark"] .switch.on { background: #a4c580; }
+[data-theme="dark"] .switch > span { background: #152016; }
+[data-theme="dark"] .music-state i { background: #89947e; }
+[data-theme="dark"] .music-state.active i { background: #b2cf8f; }
+[data-theme="dark"] :focus-visible { outline-color: var(--focus); }
+
+@media(max-width:700px) {
+  .header-actions { gap: 0; }
+  .header-note, .theme-toggle > span { display: none; }
+  .theme-toggle { padding: 10px; }
+  .intro p { font-size: 12px; max-width: 350px; margin: auto; }
+  .intro-break { display: none; }
+  .timer-hint { max-width: 310px; line-height: 1.6; }
+  .music-heading > div { flex: 1; }
+  .music-heading p { max-width: 210px; }
+  .music-state { white-space: nowrap; }
+  .practice-guide summary { padding: 15px; font-size: 12px; }
+  .guide-content { padding: 0 15px 15px; font-size: 12px; }
+  [data-theme="dark"] .round-tag { background: transparent; }
+  footer { gap: 16px; }
+  footer > span:last-child { text-align: right; }
+}
