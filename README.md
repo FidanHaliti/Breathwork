@@ -1,6 +1,6 @@
 # Breathwork Timer
 
-A complete Albanian-language breathwork app, built with React and Vite. No account, database, or backend. Three rounds, eight phases, exactly **10:10**.
+A complete Albanian-language breathwork app, built with React and Vite. No account, database, or backend. The default dynamic session has three rounds, eight phases, and lasts **10:10**. A separate standard mode repeats 5-second inhalations and 5-second exhalations without holds (30 cycles / 5 minutes by default).
 
 ## Run locally
 
@@ -36,16 +36,23 @@ Push this folder to a GitHub repository, import that repository into Vercel, and
 
 `src/session.js` owns the configuration and clock. A timestamp anchor measures elapsed time; UI intervals only refresh the display. Pause saves elapsed milliseconds. Hidden-tab throttling cannot add drift: the next refresh catches up to real elapsed time and can cross multiple phases. Timers and event listeners are cleaned up on unmount.
 
+## Customizing sessions
+
+The app always opens in dynamic mode. The discreet “Kalo te standardi” / “Kalo te dinamiku” control switches modes while idle or complete. Reset first to switch during an active/paused session.
+
+“Ndrysho timerin” pauses the session and opens a draft editor. Save resets the timer and persists settings; Cancel leaves timings unchanged and the session paused. Dynamic mode supports 1–12 rounds, with editable breathing, hold and rest durations (whole seconds, up to 600 per phase). Set hold/rest to zero to omit them. Standard mode supports 1–30 seconds per inhale/exhale and 1–120 cycles. Restore defaults applies only to the mode being edited. Progress, completion totals and round summaries use the configured timings.
+
 ## Audio
 
 - Music is always OFF on page load, regardless of stored preferences. Only a user click starts it. Timer start/pause/reset/completion do not stop or start music.
 - `public/audio/ambient.wav` is an original, bundled 24-second stereo wave soundscape made from filtered noise. It uses no pitched oscillators. Regenerate with `python scripts/generate-ambient.py`.
+- The selector also offers original synthesized rain, stream and wind textures, generated with `python scripts/generate-soundscapes.py`. All four options are bundled for offline use; changing tracks preserves whether music is playing and does not affect the timer. The selected track persists, but playback never auto-starts on reload.
 - To use your own music, place it at `public/audio/ambient.mp3`, copy `.env.example` to `.env.local`, and set `VITE_AMBIENT_AUDIO=/audio/ambient.mp3`. Rebuild. Keep files local for offline use, and use a recording you have rights to use.
 - With “Zëri shqip” ON, the countdown first uses five bundled spoken clips: `public/audio/countdown/sq-5.wav` through `sq-1.wav` (“pesë, katër, tre, dy, një”). These are synthetic Albanian speech generated with Microsoft's `sq-AL-AnilaNeural` voice. They do not require an installed browser voice or a network speech service during app use. Source metadata and durations are in `public/audio/countdown/source.json`.
 - The five clips are decoded once after Start and kept ready for instant playback. Each lasts under one second, with trimmed silence to align it with the visual number. Pause, Reset, voice OFF, phase changes, and hiding the page stop spoken audio immediately; no pending download can trigger a stale spoken number.
 - If a local clip cannot load, the countdown can use an actual browser voice with an `sq` language tag and utterance language `sq-AL`, otherwise a short beep. It never substitutes a foreign-language voice. Voice OFF uses beeps; visual countdown always works. Short sine beeps and a soft two-note transition chime remain independent of the background music.
 - Asset regeneration is optional: `python -m pip install --target .audio-tools edge-tts imageio-ffmpeg`, then `python scripts/generate-countdown.py`. This one-time generation requires internet; deployment and normal app builds only use the committed WAV files. Microsoft's voice documentation: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support
-- Local storage saves only voice ON/OFF, music volume, and the chosen light/dark theme. No microphone is used.
+- Local storage saves voice ON/OFF, music volume, selected soundscape, dynamic round settings, standard rhythm settings, and the chosen light/dark theme. No microphone is used.
 
 ## Offline
 

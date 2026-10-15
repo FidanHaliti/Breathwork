@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SessionClock } from './session';
 
-export function useSessionTimer() {
+export function useSessionTimer(phases) {
   const clock = useRef(null);
-  if (!clock.current) clock.current = new SessionClock();
+  if (!clock.current) clock.current = new SessionClock(undefined, phases);
   const [session, setSession] = useState(() => clock.current.snapshot());
   const refresh = useCallback(() => setSession(clock.current.snapshot()), []);
   const start = useCallback(() => { clock.current.start(); refresh(); }, [refresh]);
@@ -21,5 +21,6 @@ export function useSessionTimer() {
       window.removeEventListener('pageshow', refresh);
     };
   }, [session.status, refresh]);
-  return { session, start, pause, reset };
+  const configure = useCallback((nextPhases) => { clock.current.configure(nextPhases); refresh(); }, [refresh]);
+  return { session, start, pause, reset, configure };
 }

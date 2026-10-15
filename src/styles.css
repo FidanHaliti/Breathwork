@@ -121,3 +121,21 @@ html { color: var(--text); background: var(--page); }
   footer { gap: 16px; }
   footer > span:last-child { text-align: right; }
 }
+.session-tools { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin: -14px 0 26px; color: var(--secondary); font-size: 12px; }
+.quiet-button { color: var(--secondary); background: transparent; border: 0; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; padding: 12px 4px; font: inherit; min-height: 44px; }
+.quiet-button:disabled { opacity: .5; cursor: default; }
+.mode-note { text-align: center; color: var(--secondary); font-size: 12px; margin: -16px 0 22px; }
+.session-editor, .standard-overview { padding: 24px; margin: 0 0 28px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); }
+.session-editor h2, .standard-overview h2 { font-size: 18px; margin: 0 0 12px; }
+.session-editor p, .standard-overview p { font-size: 13px; line-height: 1.7; color: var(--secondary); }
+.session-editor fieldset { border: 1px solid var(--border); border-radius: 12px; margin: 18px 0; padding: 16px; min-width: 0; }
+.session-editor legend { font-size: 14px; padding: 0 6px; }
+.editor-fields { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; align-items: end; }
+.editor-fields label, .sound-picker { display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--secondary); }
+.editor-fields input, .sound-picker select { min-width: 0; width: 100%; min-height: 44px; border: 1px solid var(--border); border-radius: 9px; background: var(--page); color: var(--text); padding: 10px; font: inherit; font-size: 15px; }
+.editor-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.sound-picker { max-width: 340px; margin: 20px 0 12px; }
+.primary-button:disabled { opacity: .5; cursor: default; }
+@media(max-width:600px) { .editor-fields { grid-template-columns: 1fr; } .session-editor { padding: 16px; } .session-tools { gap: 3px 12px; margin-bottom: 18px; } }
+
+.sound-note { color: var(--secondary); font-size: 12px; line-height: 1.6; margin-bottom: 16px; }
